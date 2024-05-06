@@ -15,7 +15,7 @@ import com.dip.model.Insurances;
 import com.dip.service.InsuranceService;
 
 @RestController
-@RequestMapping("/dip")
+@RequestMapping("/dip/insurance")
 public class InsuranceController {
 	
 	@Autowired
@@ -27,7 +27,7 @@ public class InsuranceController {
 	}
 	
 	@GetMapping("/get-insurances/{username}")
-	public List<Insurances> getInsuranceHistory(@PathVariable String username) {
+	public List<Insurances> getInsuranceHistory(@RequestHeader("Authoriazation") @PathVariable String username) {
 		return insuranceService.InsuranceHistory(username);
 	}
 }
