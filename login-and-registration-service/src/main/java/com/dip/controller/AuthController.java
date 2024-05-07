@@ -20,8 +20,11 @@ import com.dip.model.User;
 import com.dip.service.UserService;
 import com.dip.util.JwtHelper;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 	
 	@Autowired
@@ -43,7 +46,11 @@ public class AuthController {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
 		String token = this.jwtHelper.generateToken(userDetails);
 		
+		log.info(token);
+		
 		JwtResponse response = new JwtResponse(token, userDetails.getUsername());
+		
+		log.info(response.toString());
 		
 		return new ResponseEntity<JwtResponse>(response, HttpStatus.OK);
 	}
@@ -52,18 +59,23 @@ public class AuthController {
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
 		try {
 			authenticationManager.authenticate(authentication);
+			log.info("Authentication Successful");
 		}catch(BadCredentialsException e) {
+			log.error("Authentication Unsuccessful");
 			throw new BadCredentialsException("Invalid Credentials");
 		}
 	}
 	
 	@ExceptionHandler(BadCredentialsException.class)
 	public String exceptionHandler() {
+		log.error("Invalid Credentials");
 		return "Invalid Credentials";
 	}
 	
 	@PostMapping("/create-user")
 	public User createUser(@RequestBody User user) {
+		log.info("User created succesfully");
+		log.info(user.toString());
 		return this.userService.createUser(user);
 	}
 	
