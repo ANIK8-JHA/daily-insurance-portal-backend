@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dip.exceptions.NotEnoughBalanceException;
+import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.Insurances;
 import com.dip.repository.InsuranceRepository;
 
@@ -22,11 +24,11 @@ public class InsuranceService {
 	private WalletService walletService;
 	
 	
-	public Insurances purchasePolicy(Insurances policy, String username) throws Exception {
+	public Insurances purchasePolicy(Insurances policy, String username) throws WalletNotFoundException, NotEnoughBalanceException {
 		log.info("checking if user has sufficient wallet balance or not");
 		if(this.walletService.getCurrentWalletBalanceByUsername(username) < policy.getPremium()) {
 			log.info("balance is less than the required balance");
-			throw new Exception("Not enough wallet balance");
+			throw new NotEnoughBalanceException("Not enough wallet balance");
 		}
 		log.info("sufficent balance found : " + this.walletService.getCurrentWalletBalanceByUsername(username));
 		policy.setUsername(username);

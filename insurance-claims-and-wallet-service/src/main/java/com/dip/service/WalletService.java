@@ -3,6 +3,7 @@ package com.dip.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.Wallets;
 import com.dip.repository.WalletRepository;
 
@@ -38,8 +39,9 @@ public class WalletService {
 		return walletRepo.findWalletBalanceByUsername(username);
 	}
 	
-	public void updateBalance(String username, int balance) {
+	public void updateBalance(String username, int balance) throws WalletNotFoundException {
 		Wallets latestWallet = walletRepo.findLatesTransaction(username);
+		if(latestWallet == null) throw new WalletNotFoundException("No wallet data found");
 		latestWallet.setWalletBalance(this.getCurrentWalletBalanceByUsername(username) - balance);
 		this.walletRepo.save(latestWallet);
 	}

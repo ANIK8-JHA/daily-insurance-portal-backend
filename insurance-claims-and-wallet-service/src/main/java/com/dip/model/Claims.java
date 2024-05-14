@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table
@@ -16,8 +17,10 @@ public class Claims {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long claimsId;
 	private String username;
+	@NotBlank(message = "Policy name not selected")
 	private String policyName;
 	private Date dateOfPurchase;
+	@NotBlank(message = "Calim amount not entered")
 	private int claimAmount;
 
 	public Claims() {

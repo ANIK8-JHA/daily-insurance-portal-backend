@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -16,7 +17,9 @@ public class Wallets {
 	private long walletId;
 	private String username;
 	private int walletBalance;
+	@NotBlank(message = "Mode of payment not selected")
 	private String walletType;
+	@NotBlank(message = "Balance value is 0")
 	private int addedBalance;
 	public Wallets() {
 		super();
