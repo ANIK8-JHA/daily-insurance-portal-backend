@@ -18,14 +18,14 @@ public class Claims {
 	private String username;
 	private String policyName;
 	private Date dateOfPurchase;
-	private String claimAmount;
+	private int claimAmount;
 
 	public Claims() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Claims(long claimsId, String username, String policyName, Date dateOfPurchase, String claimAmount) {
+	public Claims(long claimsId, String username, String policyName, Date dateOfPurchase, int claimAmount) {
 		super();
 		this.claimsId = claimsId;
 		this.username = username;
@@ -66,11 +66,11 @@ public class Claims {
 		this.dateOfPurchase = dateOfPurchase;
 	}
 
-	public String getClaimAmount() {
+	public int getClaimAmount() {
 		return claimAmount;
 	}
 
-	public void setClaimAmount(String claimAmount) {
+	public void setClaimAmount(int claimAmount) {
 		this.claimAmount = claimAmount;
 	}
 

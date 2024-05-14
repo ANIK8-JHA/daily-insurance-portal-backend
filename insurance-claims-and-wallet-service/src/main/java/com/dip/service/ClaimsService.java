@@ -9,17 +9,21 @@ import com.dip.model.Claims;
 import com.dip.repository.ClaimsRepository;
 import com.dip.repository.InsuranceRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ClaimsService {
 	
 	@Autowired
 	private ClaimsRepository claimsRepo;
 	
 	@Autowired
-	private InsuranceRepository insuranceRepo;
+	private InsuranceService insuranceService;
 	
 	public Claims newClaim(Claims claim, String username) {
-		claim.setDateOfPurchase(insuranceRepo.findByUsernameAndInsuranceName(username, claim.getPolicyName()));
+//		log.info(insuranceService.getDateOfPurchaseByInsurancename(username, claim.getPolicyName()).toString());
+		claim.setDateOfPurchase(insuranceService.getDateOfPurchaseByInsurancename(username, claim.getPolicyName()));
 		claim.setUsername(username);
 		return claimsRepo.save(claim);
 	}

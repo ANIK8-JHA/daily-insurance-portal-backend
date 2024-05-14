@@ -3,6 +3,8 @@ package com.dip.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +24,15 @@ public class ClaimsController {
 	private ClaimsService claimsService;
 	
 	@PostMapping("/submit-claim/{username}")
-	public Claims submitClaim(@RequestHeader("Authorization") @PathVariable String usrname, @RequestBody Claims claim) {
-		return claimsService.newClaim(claim, usrname);
+	public ResponseEntity<Claims> submitClaim(@RequestHeader("Authorization") @PathVariable String username, @RequestBody Claims claim) {
+		Claims newClaim = claimsService.newClaim(claim, username);
+		return new ResponseEntity<Claims>(newClaim, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/get-claims/{username}")
-	public List<Claims> getAllClaims(@RequestHeader("Authorization") @PathVariable String username) {
-		return claimsService.getClaimsHistory(username);
+	public ResponseEntity<List<Claims>> getAllClaims(@RequestHeader("Authorization") @PathVariable String username) {
+		List<Claims> list = claimsService.getClaimsHistory(username);
+		return new ResponseEntity<List<Claims>>(list, HttpStatus.OK);
 	}
 	
 
