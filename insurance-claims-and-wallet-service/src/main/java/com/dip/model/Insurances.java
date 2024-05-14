@@ -17,19 +17,19 @@ public class Insurances {
 	private long insuranceId;
 	private String username;
 	private String insuranceName;
-	private String premium;
-	private Date puchaseDate;
+	private int premium;
+	private Date purchaseDate;
 	public Insurances() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Insurances(long insuranceId, String username, String insuranceName, String premium, Date puchaseDate) {
+	public Insurances(long insuranceId, String username, String insuranceName, int premium, Date purchaseDate) {
 		super();
 		this.insuranceId = insuranceId;
 		this.username = username;
 		this.insuranceName = insuranceName;
 		this.premium = premium;
-		this.puchaseDate = puchaseDate;
+		this.purchaseDate = purchaseDate;
 	}
 	public long getInsuranceId() {
 		return insuranceId;
@@ -49,22 +49,22 @@ public class Insurances {
 	public void setInsuranceName(String insuranceName) {
 		this.insuranceName = insuranceName;
 	}
-	public String getPremium() {
+	public int getPremium() {
 		return premium;
 	}
-	public void setPremium(String premium) {
+	public void setPremium(int premium) {
 		this.premium = premium;
 	}
-	public Date getPuchaseDate() {
-		return puchaseDate;
+	public Date getPurchaseDate() {
+		return purchaseDate;
 	}
-	public void setPuchaseDate(Date puchaseDate) {
-		this.puchaseDate = puchaseDate;
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
 	}
 	@Override
 	public String toString() {
 		return "Insurances [insuranceId=" + insuranceId + ", username=" + username + ", insuranceName=" + insuranceName
-				+ ", premium=" + premium + ", puchaseDate=" + puchaseDate + "]";
+				+ ", premium=" + premium + ", purchaseDate=" + purchaseDate + "]";
 	}
 	
 	

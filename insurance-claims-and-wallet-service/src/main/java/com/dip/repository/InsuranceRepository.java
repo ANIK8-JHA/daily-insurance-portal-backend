@@ -12,8 +12,8 @@ import com.dip.model.Insurances;
 @Repository
 public interface InsuranceRepository extends JpaRepository<Insurances, Long> {
 	
-	@Query(value = "select puchase_data from insurances where username=?1 and insurance_name=?2", nativeQuery = true)
-	public Date findByUsernameAndInsuranceName(String username, String insuranceName);
+	@Query(value = "select purchase_date from insurances where username=?1 and insurance_name=?2", nativeQuery = true)
+	public Date findDateByUsernameAndInsuranceName(String username, String insuranceName);
 	
 	public List<Insurances> findAllByUsername(String username);
 }
