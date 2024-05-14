@@ -5,37 +5,41 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table
+@Data
 public class Wallets {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long walledId;
+	private long walletId;
 	private String username;
 	private int walletBalance;
 	private String walletType;
+	private int addedBalance;
 	public Wallets() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Wallets(long walledId, String username, int walletBalance, String walletType) {
+	public Wallets(long walletId, String username, int walletBalance, String walletType, int addedBalance) {
 		super();
-		this.walledId = walledId;
+		this.walletId = walletId;
 		this.username = username;
 		this.walletBalance = walletBalance;
 		this.walletType = walletType;
+		this.addedBalance = addedBalance;
 	}
-	public long getWalledId() {
-		return walledId;
+	public long getWalletId() {
+		return walletId;
 	}
-	public void setWalledId(long walledId) {
-		this.walledId = walledId;
+	public void setWalletId(long walletId) {
+		this.walletId = walletId;
 	}
-	public String getusername() {
+	public String getUsername() {
 		return username;
 	}
-	public void setusername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 	public int getWalletBalance() {
@@ -50,10 +54,16 @@ public class Wallets {
 	public void setWalletType(String walletType) {
 		this.walletType = walletType;
 	}
+	public int getAddedBalance() {
+		return addedBalance;
+	}
+	public void setAddedBalance(int addedBalance) {
+		this.addedBalance = addedBalance;
+	}
 	@Override
 	public String toString() {
-		return "Wallets [walledId=" + walledId + ", username=" + username + ", walletBalance=" + walletBalance
-				+ ", WalletType=" + walletType + "]";
+		return "Wallets [walletId=" + walletId + ", username=" + username + ", walletBalance=" + walletBalance
+				+ ", walletType=" + walletType + ", addedBalance=" + addedBalance + "]";
 	}
 	
 	

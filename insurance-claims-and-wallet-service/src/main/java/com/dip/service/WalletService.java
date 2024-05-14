@@ -6,30 +6,42 @@ import org.springframework.stereotype.Service;
 import com.dip.model.Wallets;
 import com.dip.repository.WalletRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class WalletService {
-	
+
 	@Autowired
 	private WalletRepository walletRepo;
-	
+
 	public Wallets addWalletBalance(Wallets wallet, String username) {
-		Wallets currentWallet;
-		if(this.walletRepo.findByUsername(username) != null) {
-			currentWallet = this.walletRepo.findByUsername(username);			
-			currentWallet.setWalletBalance(currentWallet.getWalletBalance() + wallet.getWalletBalance());
-		}else {
-			currentWallet = new Wallets();
-			currentWallet.setWalletBalance(wallet.getWalletBalance());
-		}
-		currentWallet.setusername(wallet.getusername());
+		Wallets currentWallet = new Wallets();
+		int currentWalletBalance = this.getCurrentWalletBalanceByUsername(username);			
+		currentWallet.setWalletBalance(currentWalletBalance + wallet.getAddedBalance());
+		currentWallet.setUsername(username);
 		currentWallet.setWalletType(wallet.getWalletType());
+		currentWallet.setAddedBalance(wallet.getAddedBalance());
+
 		return walletRepo.save(currentWallet);
 	}
-	
+ 
 	public int getCurrentWalletBalanceByUsername(String username) {
-		if(this.walletRepo.findByUsername(username) == null) return 0;
-		Wallets wallet = this.walletRepo.findByUsername(username);
-		return wallet.getWalletBalance();
+		if (walletRepo.findByUsername(username).size() == 0) {
+			log.info("Wallet details not found with the username " + username);
+			return 0;
+		}else {
+			log.info("wallet not giving null value, even though it should");
+			log.info(walletRepo.findByUsername(username).toString());
+		}
+			
+		return walletRepo.findWalletBalanceByUsername(username);
+	}
+	
+	public void updateBalance(String username, int balance) {
+		Wallets latestWallet = walletRepo.findLatesTransaction(username);
+		latestWallet.setWalletBalance(this.getCurrentWalletBalanceByUsername(username) - balance);
+		this.walletRepo.save(latestWallet);
 	}
 
 }
