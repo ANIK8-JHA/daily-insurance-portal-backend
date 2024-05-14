@@ -8,23 +8,27 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dip.exceptions.UserAlreadyExistsException;
+import com.dip.exceptions.UserNotFoundException;
 import com.dip.model.JwtRequest;
 import com.dip.model.JwtResponse;
 import com.dip.model.User;
 import com.dip.service.UserService;
 import com.dip.util.JwtHelper;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/auth")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class AuthController {
 	
 	@Autowired
@@ -40,7 +44,7 @@ public class AuthController {
 	private UserService userService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws UserNotFoundException {
 		this.doAuthenticate(request.getUsername(), request.getPassword());
 		
 		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
@@ -48,7 +52,7 @@ public class AuthController {
 		
 		log.info(token);
 		
-		JwtResponse response = new JwtResponse(token, userDetails.getUsername());
+		JwtResponse response = new JwtResponse(token, userDetails.getUsername(), userService.getIdByUserName(request.getUsername()));
 		
 		log.info(response.toString());
 		
@@ -65,18 +69,15 @@ public class AuthController {
 			throw new BadCredentialsException("Invalid Credentials");
 		}
 	}
-	
-	@ExceptionHandler(BadCredentialsException.class)
-	public String exceptionHandler() {
-		log.error("Invalid Credentials");
-		return "Invalid Credentials";
-	}
+
 	
 	@PostMapping("/create-user")
-	public User createUser(@RequestBody User user) {
-		log.info("User created succesfully");
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user) throws Exception {
+		log.info("Creating User");
 		log.info(user.toString());
-		return this.userService.createUser(user);
+		User newUser =  this.userService.createUser(user);
+		log.info("User created successfully");
+		return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
 	}
 	
 }
