@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dip.classes.Insurance;
-import com.dip.model.Insurances;
 import com.dip.model.UserPolicyClaim;
-import com.dip.service.PolicyService;
 import com.dip.service.UserPolicyClaimService;
 
 import lombok.extern.slf4j.Slf4j;

@@ -34,4 +34,12 @@ public class GlobalExceptionHandler {
 		map.put("ErrorMessage", ex.getMessage());
 		return map;
 	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(AmountExceededLimitException.class)
+	public Map<String, String> AmountExceededLimitHandler(NotEnoughBalanceException ex) {
+		Map<String, String> map = new HashMap<>();
+		map.put("ErrorMessage", ex.getMessage());
+		return map;
+	}
 }

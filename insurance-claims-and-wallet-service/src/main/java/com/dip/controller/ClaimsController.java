@@ -43,10 +43,4 @@ public class ClaimsController {
 		return new ResponseEntity<List<UserPolicyClaim>>(obj, HttpStatus.OK);
 	}
 
-//	@GetMapping("/get-claims/{username}")
-//	public ResponseEntity<List<Claims>> getAllClaims(@RequestHeader("Authorization") @PathVariable String username) {
-//		List<Claims> list = claimsService.getClaimsHistory(username);
-//		return new ResponseEntity<List<Claims>>(list, HttpStatus.OK);
-//	}
-
 }

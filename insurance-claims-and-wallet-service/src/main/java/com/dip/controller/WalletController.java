@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dip.exceptions.AmountExceededLimitException;
 import com.dip.model.Wallets;
 import com.dip.service.WalletService;
 
@@ -36,7 +37,7 @@ public class WalletController {
 	}
 	
 	@PostMapping("/add-balance/{username}")
-	public ResponseEntity<Wallets> addWalletBalance(@RequestHeader(name = "Authorization", required = true) @PathVariable String username, @RequestBody Wallets wallet) {
+	public ResponseEntity<Wallets> addWalletBalance(@RequestHeader(name = "Authorization", required = true) @PathVariable String username, @RequestBody Wallets wallet) throws AmountExceededLimitException {
 		log.info("Initiating the process of adding wallet balance for the user with username " + username);
 		Wallets newWallet = walletService.addWalletBalance(wallet, username);
 		return new ResponseEntity<Wallets>(newWallet, HttpStatus.CREATED);

@@ -32,12 +32,10 @@ public class UserService {
 //		log.error("No user found", repo.findByUsername(user.getUsername()).orElse(null));
 		User oldUser = repo.findByUsername(user.getUsername()).orElse(null);
 		if(oldUser != null) {
-			log.error("User with found with username : " + user.getUsername());
-			User newUser = repo.findByUsername(user.getUsername()).orElse(null);
-			log.info(newUser.getEmail());
 			throw new UserAlreadyExistsException("User already presnet with the username : " + user.getUsername());
 		}
-		if(repo.findByEmail(user.getEmail()) != null) throw new UserAlreadyExistsException("User already present with the email : " + user.getEmail());
+		User oldUser2 = repo.findByEmail(user.getEmail()).orElse(null);
+		if(oldUser2 != null) throw new UserAlreadyExistsException("User already present with the email : " + user.getEmail());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setConfPassword(passwordEncoder.encode(user.getConfPassword()));
 		return this.repo.save(user);

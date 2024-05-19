@@ -3,6 +3,7 @@ package com.dip.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dip.exceptions.AmountExceededLimitException;
 import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.Wallets;
 import com.dip.repository.WalletRepository;
@@ -16,9 +17,10 @@ public class WalletService {
 	@Autowired
 	private WalletRepository walletRepo;
 
-	public Wallets addWalletBalance(Wallets wallet, String username) {
+	public Wallets addWalletBalance(Wallets wallet, String username) throws AmountExceededLimitException {
 		Wallets currentWallet = new Wallets();
-		int currentWalletBalance = this.getCurrentWalletBalanceByUsername(username);			
+		int currentWalletBalance = this.getCurrentWalletBalanceByUsername(username);
+		if(currentWalletBalance + wallet.getAddedBalance() > 10000) throw new AmountExceededLimitException("Wallet balance can not be more than 10000");
 		currentWallet.setWalletBalance(currentWalletBalance + wallet.getAddedBalance());
 		currentWallet.setUsername(username);
 		currentWallet.setWalletType(wallet.getWalletType());
