@@ -30,6 +30,7 @@ public class WalletService {
 	public int getCurrentWalletBalanceByUsername(String username) {
 		if (walletRepo.findByUsername(username).size() == 0) {
 			log.info("Wallet details not found with the username " + username);
+			log.info("setting wallet balance to 0");
 			return 0;
 		}else {
 			log.info("wallet not giving null value, even though it should");
@@ -42,8 +43,17 @@ public class WalletService {
 	public void updateBalance(String username, int balance) throws WalletNotFoundException {
 		Wallets latestWallet = walletRepo.findLatesTransaction(username);
 		if(latestWallet == null) throw new WalletNotFoundException("No wallet data found");
-		latestWallet.setWalletBalance(this.getCurrentWalletBalanceByUsername(username) - balance);
-		this.walletRepo.save(latestWallet);
+		else log.info("Wallet found");
+		log.info("Updating Wallet Balance");
+		log.info("current wallet balance" + this.getCurrentWalletBalanceByUsername(username));
+		log.info("Deducted Balance" + balance);
+		Wallets newWallet = new Wallets();
+		newWallet.setWalletBalance(this.getCurrentWalletBalanceByUsername(username) - balance);
+		newWallet.setUsername(username);
+		newWallet.setAddedBalance(0);
+		this.walletRepo.save(newWallet);
+		log.info("new wallet");
+		log.info(newWallet.toString());
 	}
 
 }

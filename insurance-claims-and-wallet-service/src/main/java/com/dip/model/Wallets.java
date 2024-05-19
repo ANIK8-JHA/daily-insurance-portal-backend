@@ -17,9 +17,7 @@ public class Wallets {
 	private long walletId;
 	private String username;
 	private int walletBalance;
-	@NotBlank(message = "Mode of payment not selected")
 	private String walletType;
-	@NotBlank(message = "Balance value is 0")
 	private int addedBalance;
 	public Wallets() {
 		super();

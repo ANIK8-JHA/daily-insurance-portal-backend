@@ -44,7 +44,7 @@ public class AuthController {
 	private UserService userService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws UserNotFoundException {
+	public ResponseEntity<JwtResponse> login(@Valid @RequestBody JwtRequest request) throws UserNotFoundException {
 		this.doAuthenticate(request.getUsername(), request.getPassword());
 		
 		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());

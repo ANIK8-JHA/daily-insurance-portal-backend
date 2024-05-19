@@ -37,7 +37,7 @@ public class UserService {
 			log.info(newUser.getEmail());
 			throw new UserAlreadyExistsException("User already presnet with the username : " + user.getUsername());
 		}
-//		if(repo.findByEmail(user.getEmail()) != null) throw new UserAlreadyExistsException("User already present with the email : " + user.getEmail());
+		if(repo.findByEmail(user.getEmail()) != null) throw new UserAlreadyExistsException("User already present with the email : " + user.getEmail());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setConfPassword(passwordEncoder.encode(user.getConfPassword()));
 		return this.repo.save(user);

@@ -17,9 +17,9 @@ public class Insurances {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long insuranceId;
 	private String username;
-	@NotBlank(message = "Policy name not selected")
+//	@NotBlank(message = "Policy name not selected")
 	private String insuranceName;
-	@NotBlank(message = "Premium not selected")
+//	@NotBlank(message = "Premium not selected")
 	private int premium;
 	private Date purchaseDate;
 	public Insurances() {

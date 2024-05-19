@@ -17,10 +17,10 @@ public class Claims {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long claimsId;
 	private String username;
-	@NotBlank(message = "Policy name not selected")
+//	@NotBlank(message = "Policy name not selected")
 	private String policyName;
 	private Date dateOfPurchase;
-	@NotBlank(message = "Calim amount not entered")
+//	@NotBlank(message = "Calim amount not entered")
 	private int claimAmount;
 
 	public Claims() {
