@@ -37,9 +37,48 @@ public class GlobalExceptionHandler {
 	
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(AmountExceededLimitException.class)
-	public Map<String, String> AmountExceededLimitHandler(NotEnoughBalanceException ex) {
+	public Map<String, String> AmountExceededLimitHandler(AmountExceededLimitException ex) {
 		Map<String, String> map = new HashMap<>();
 		map.put("ErrorMessage", ex.getMessage());
 		return map;
 	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ClaimAmountGreaterThanCoverageAmountException.class)
+	public Map<String, String> ClaimAmountGreaterThanCoverageAmountHandler(ClaimAmountGreaterThanCoverageAmountException ex) {
+		Map<String, String> map = new HashMap<>();
+		map.put("ErrorMessage", ex.getMessage());
+		return map;
+	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(PolicyAlreadyClaimedException.class)
+	public Map<String, String> PolicyAlreadyClaimedHandler(PolicyAlreadyClaimedException ex) {
+		Map<String, String> map = new HashMap<>();
+		map.put("ErrorMessage", ex.getMessage());
+		return map;
+	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(BuyingPolicyOnTheSameDayException.class)
+	public Map<String, String> BuyingPolicyOnTheSameDayHandler(BuyingPolicyOnTheSameDayException ex) {
+		Map<String, String> map = new HashMap<>();
+		map.put("ErrorMessage", ex.getMessage());
+		return map;
+	}
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(SubmittingClaimOnTheSameDayException.class)
+	public Map<String, String> SubmittingClaimOnTheSameDayHandler(SubmittingClaimOnTheSameDayException ex) {
+		Map<String, String> map = new HashMap<>();
+		map.put("ErrorMessage", ex.getMessage());
+		return map;
+	}
+	
+//	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+//	@ExceptionHandler(SubmittingClaimOnTheSameDayException.class)
+//	public Map<String, String> SubmittingClaimOnTheSameDayHandler(SubmittingClaimOnTheSameDayException ex) {
+//		Map<String, String> map = new HashMap<>();
+//		map.put("ErrorMessage", ex.getMessage());
+//		return map;
+//	}
 }

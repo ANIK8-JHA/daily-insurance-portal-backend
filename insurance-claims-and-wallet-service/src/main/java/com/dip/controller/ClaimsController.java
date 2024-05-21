@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dip.classes.Claim;
+import com.dip.exceptions.ClaimAmountGreaterThanCoverageAmountException;
+import com.dip.exceptions.PolicyAlreadyClaimedException;
+import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.UserPolicyClaim;
 import com.dip.service.PolicyService;
 import com.dip.service.UserPolicyClaimService;
@@ -31,9 +34,9 @@ public class ClaimsController {
 	@Autowired
 	private PolicyService policyService;
 
-	@PostMapping("/submit-claim")
-	public ResponseEntity<UserPolicyClaim> submitClaim(@RequestHeader("Authorization") @RequestBody Claim claim) {
-		UserPolicyClaim newClaim = claimsService.newClaim(claim);
+	@PostMapping("/submit-claim/{username}")
+	public ResponseEntity<UserPolicyClaim> submitClaim(@RequestHeader("Authorization") @PathVariable String username, @RequestBody Claim claim) throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException {
+		UserPolicyClaim newClaim = claimsService.newClaim(claim, username);
 		return new ResponseEntity<UserPolicyClaim>(newClaim, HttpStatus.CREATED);
 	}
 	

@@ -23,7 +23,7 @@ public class WalletServiceTest {
 	public void testAddWalletBalance() throws AmountExceededLimitException {
 		Wallets newWallet = new Wallets();
 		newWallet.setWalletType("UPI");
-		newWallet.setAddedBalance(1000);
+		newWallet.setAddedBalance(3000);
 		assertNotNull(walletService.addWalletBalance(newWallet, "anik8-jha"));
 	}
 	

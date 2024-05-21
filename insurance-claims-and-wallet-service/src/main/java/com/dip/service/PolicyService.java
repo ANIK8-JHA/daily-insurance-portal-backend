@@ -37,4 +37,8 @@ public class PolicyService {
 		if(requestedCoverage > policy.getPolicyCoverage()) return false;
 		return true;
 	}
+	
+	public Policy findByPolicyName(String policyName) {
+		return policyRepo.findByPolicyName(policyName);
+	}
 }

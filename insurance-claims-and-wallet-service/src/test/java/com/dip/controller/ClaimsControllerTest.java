@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.dip.classes.Claim;
+import com.dip.exceptions.ClaimAmountGreaterThanCoverageAmountException;
+import com.dip.exceptions.PolicyAlreadyClaimedException;
+import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.UserPolicyClaim;
 import com.dip.service.UserPolicyClaimService;
 
@@ -32,7 +35,7 @@ public class ClaimsControllerTest {
 	private ClaimsController claimsController;
 
 	@Test
-	public void testSubmitClaim() {
+	public void testSubmitClaim() throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException {
 		Claim claim = new Claim();
 		claim.setClaimAmount(5000);
 		claim.setPolicyName("Policy1");
@@ -40,9 +43,9 @@ public class ClaimsControllerTest {
 		obj.setClaimAmount(claim.getClaimAmount());
 		obj.setClaimStatus("Claimed");
 
-		Mockito.when(claimsService.newClaim(claim)).thenReturn(obj);
+		Mockito.when(claimsService.newClaim(claim, null)).thenReturn(obj);
 
-		ResponseEntity<UserPolicyClaim> response = claimsController.submitClaim(claim);
+		ResponseEntity<UserPolicyClaim> response = claimsController.submitClaim(null, claim);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 	}

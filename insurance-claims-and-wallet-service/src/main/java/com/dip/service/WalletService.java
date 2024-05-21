@@ -57,5 +57,17 @@ public class WalletService {
 		log.info("new wallet");
 		log.info(newWallet.toString());
 	}
+	
+	public void updateClaimBalanceInWallet(String username, int balance) throws WalletNotFoundException{
+		Wallets latestWallet = walletRepo.findLatesTransaction(username);
+		if(latestWallet == null) throw new WalletNotFoundException("No wallet data found");
+		Wallets newWallet = new Wallets();
+		int currentBalance = this.getCurrentWalletBalanceByUsername(username) + balance;
+		if(currentBalance > 10000) currentBalance = 10000;
+		newWallet.setWalletBalance(currentBalance);
+		newWallet.setUsername(username);
+		newWallet.setAddedBalance(0);
+		this.walletRepo.save(newWallet);
+	}
 
 }
