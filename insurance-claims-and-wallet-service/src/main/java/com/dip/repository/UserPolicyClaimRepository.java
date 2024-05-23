@@ -19,6 +19,6 @@ public interface UserPolicyClaimRepository extends JpaRepository<UserPolicyClaim
 	public UserPolicyClaim findByPolicyIdAndDop(long policyId, String purchaseDttm);
 	
 	@Query(value = "select * from user_policy_claim where user_id=?1 order by policy_claim_id desc limit 1", nativeQuery = true)
-	public UserPolicyClaim findByUserId(long userId);
+	public UserPolicyClaim findLatestByUserId(long userId);
 
 }

@@ -30,14 +30,14 @@ public class InsuranceController {
 	private UserPolicyClaimService insuranceService;
 	
 	@PostMapping("/buy-insurance/{username}/{userId}")
-	public ResponseEntity<UserPolicyClaim> buyInsurance(@RequestHeader("Authoriazation") @PathVariable String username, @PathVariable long userId, @RequestBody Insurance insurance) throws Exception {
+	public ResponseEntity<UserPolicyClaim> buyInsurance(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable String username, @PathVariable long userId, @RequestBody Insurance insurance) throws Exception {
 		log.info("Initiating buying process");
 		UserPolicyClaim newInsurance =  insuranceService.purchasePolicy(insurance, userId, username);
 		return new ResponseEntity<UserPolicyClaim>(newInsurance, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/get-insurances/{userId}")
-	public ResponseEntity<List<UserPolicyClaim>> getUserPolicyClaimHistory(@RequestHeader("Authoriazation") @PathVariable long userId) {
+	public ResponseEntity<List<UserPolicyClaim>> getUserPolicyClaimHistory(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable long userId) {
 		List<UserPolicyClaim> list = insuranceService.getAllUserPolicyClaimsByUserId(userId);
 		return new ResponseEntity<List<UserPolicyClaim>>(list, HttpStatus.OK);
 	}

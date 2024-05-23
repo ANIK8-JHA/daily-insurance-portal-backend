@@ -27,12 +27,12 @@ public class PolicyController {
 	private PolicyService policyService;
 	
 	@GetMapping("/get-all-policies")
-	public ResponseEntity<List<Policy>> getAllPolicies() {
+	public ResponseEntity<List<Policy>> getAllPolicies(@RequestHeader(name = "Authorization", required = false) String auth) {
 		return new ResponseEntity<List<Policy>>(policyService.getAllPolicies(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/get-policy-name/{policyId}")
-	public ResponseEntity<String> getPolicyNameById(@RequestHeader("Authorization") @PathVariable long policyId) {
+	public ResponseEntity<String> getPolicyNameById(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable long policyId) {
 		return new ResponseEntity<String>(policyService.getPolicyNameById(policyId), HttpStatus.OK);
 	}
 

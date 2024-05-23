@@ -29,15 +29,14 @@ public class WalletController {
 	private WalletService walletService;
 	
 	@GetMapping("/get-balance/{username}")
-	public ResponseEntity<Integer> getCurrentWalletBalance(@RequestHeader(name = "Authorization", required = true) String auth, @PathVariable String username) {
-		if(auth == null || auth.isEmpty()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+	public ResponseEntity<Integer> getCurrentWalletBalance(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable String username) {
 		log.info("trying to fetch the wallet details with the username " + username);
 		int balance =  walletService.getCurrentWalletBalanceByUsername(username);
 		return new ResponseEntity<Integer>(balance, HttpStatus.OK);
 	}
 	
 	@PostMapping("/add-balance/{username}")
-	public ResponseEntity<Wallets> addWalletBalance(@RequestHeader(name = "Authorization", required = true) @PathVariable String username, @RequestBody Wallets wallet) throws AmountExceededLimitException {
+	public ResponseEntity<Wallets> addWalletBalance(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable String username, @RequestBody Wallets wallet) throws AmountExceededLimitException {
 		log.info("Initiating the process of adding wallet balance for the user with username " + username);
 		Wallets newWallet = walletService.addWalletBalance(wallet, username);
 		return new ResponseEntity<Wallets>(newWallet, HttpStatus.CREATED);

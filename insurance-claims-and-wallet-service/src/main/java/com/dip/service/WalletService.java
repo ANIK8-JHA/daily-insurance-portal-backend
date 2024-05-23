@@ -20,8 +20,12 @@ public class WalletService {
 	public Wallets addWalletBalance(Wallets wallet, String username) throws AmountExceededLimitException {
 		Wallets currentWallet = new Wallets();
 		int currentWalletBalance = this.getCurrentWalletBalanceByUsername(username);
+		log.info("Required value below");
+		log.info(String.valueOf(currentWalletBalance));
 		if(currentWalletBalance + wallet.getAddedBalance() > 10000) throw new AmountExceededLimitException("Wallet balance can not be more than 10000");
 		currentWallet.setWalletBalance(currentWalletBalance + wallet.getAddedBalance());
+		log.info("another required value below");
+		log.info(String.valueOf(currentWallet.getWalletBalance()));
 		currentWallet.setUsername(username);
 		currentWallet.setWalletType(wallet.getWalletType());
 		currentWallet.setAddedBalance(wallet.getAddedBalance());

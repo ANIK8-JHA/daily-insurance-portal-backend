@@ -29,7 +29,7 @@ public class UserService {
 	}
 	
 	public User createUser(User user) throws UserAlreadyExistsException {
-//		log.error("No user found", repo.findByUsername(user.getUsername()).orElse(null));
+		log.error("No user found", repo.findByUsername(user.getUsername()).orElse(null));
 		User oldUser = repo.findByUsername(user.getUsername()).orElse(null);
 		if(oldUser != null) {
 			throw new UserAlreadyExistsException("User already presnet with the username : " + user.getUsername());

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dip.classes.Claim;
 import com.dip.exceptions.ClaimAmountGreaterThanCoverageAmountException;
 import com.dip.exceptions.PolicyAlreadyClaimedException;
+import com.dip.exceptions.SubmittingClaimOnTheSameDayException;
 import com.dip.exceptions.WalletNotFoundException;
 import com.dip.model.UserPolicyClaim;
-import com.dip.service.PolicyService;
 import com.dip.service.UserPolicyClaimService;
 
 @RestController
@@ -30,18 +29,15 @@ public class ClaimsController {
 
 	@Autowired
 	private UserPolicyClaimService claimsService;
-	
-	@Autowired
-	private PolicyService policyService;
 
 	@PostMapping("/submit-claim/{username}")
-	public ResponseEntity<UserPolicyClaim> submitClaim(@RequestHeader("Authorization") @PathVariable String username, @RequestBody Claim claim) throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException {
+	public ResponseEntity<UserPolicyClaim> submitClaim(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable String username, @RequestBody Claim claim) throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException, SubmittingClaimOnTheSameDayException {
 		UserPolicyClaim newClaim = claimsService.newClaim(claim, username);
 		return new ResponseEntity<UserPolicyClaim>(newClaim, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/get-all-by/{userId}")
-	public ResponseEntity<List<UserPolicyClaim>> getAllUserPolicyClaimsByUserId(@RequestHeader("Authorization") @PathVariable long userId) {
+	public ResponseEntity<List<UserPolicyClaim>> getAllUserPolicyClaimsByUserId(@RequestHeader(name = "Authorization", required = false) String auth, @PathVariable long userId) {
 		List<UserPolicyClaim> obj = claimsService.getAllUserPolicyClaimsByUserId(userId);
 		return new ResponseEntity<List<UserPolicyClaim>>(obj, HttpStatus.OK);
 	}

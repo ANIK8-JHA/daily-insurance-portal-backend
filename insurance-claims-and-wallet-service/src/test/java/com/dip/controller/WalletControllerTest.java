@@ -1,65 +1,67 @@
 package com.dip.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 
 import com.dip.model.Wallets;
 import com.dip.service.WalletService;
-
-@ExtendWith(MockitoExtension.class)
+import com.fasterxml.jackson.databind.ObjectMapper;
+ 
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class WalletControllerTest {
-
-    @Mock
+ 
+    @Autowired
+    private MockMvc mockMvc;
+ 
+    @MockBean
     private WalletService walletService;
-
-    @Mock
-    private Wallets wallet;
-
-    @Mock
-    private ResponseEntity<Wallets> responseEntity;
-
-    @InjectMocks
-    private WalletController walletController;
-
+ 
     @Test
-    public void testAddWalletBalance() throws Exception {
-    	String username = "anik8-jha";
-        Wallets requestWallet = new Wallets();
-        requestWallet.setAddedBalance(100);
-        requestWallet.setWalletType("UPI");
-
-        ResponseEntity<Wallets> response = walletController.addWalletBalance(username, requestWallet);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-
+    public void testGetCurrentWalletBalance() throws Exception {
+        when(walletService.getCurrentWalletBalanceByUsername(anyString())).thenReturn(100);
+ 
+        mockMvc.perform(get("/dip/wallet/get-balance/testUser")
+                .header("Authorization", "Bearer testToken"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(100)));
     }
-    
+ 
     @Test
-    public void testGetCurrentWalletBalance() {
-    	String username = "user";
-        int balance = 50;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer token");
-
-        Mockito.when(walletService.getCurrentWalletBalanceByUsername(username)).thenReturn(balance);
-
-        // Act
-        ResponseEntity<Integer> response = walletController.getCurrentWalletBalance(headers.toString(), username);
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    public void testAddWalletBalanceSuccess() throws Exception {
+        Wallets wallet = new Wallets();
+        wallet.setAddedBalance(100);
+ 
+        Wallets newWallet = new Wallets();
+        newWallet.setWalletBalance(200);
+ 
+        when(walletService.addWalletBalance(any(Wallets.class), anyString())).thenReturn(newWallet);
+ 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestJson = objectMapper.writeValueAsString(wallet);
+ 
+        mockMvc.perform(post("/dip/wallet/add-balance/testUser")
+                .header("Authorization", "Bearer testToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.walletBalance", is(200)));
     }
 }

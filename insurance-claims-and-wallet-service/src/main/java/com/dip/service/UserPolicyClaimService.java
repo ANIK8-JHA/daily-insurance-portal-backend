@@ -61,7 +61,7 @@ public class UserPolicyClaimService {
 		return this.userPolicyClaimRepo.save(obj);
 	}
 
-	public UserPolicyClaim newClaim(Claim claimObj, String username) throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException {
+	public UserPolicyClaim newClaim(Claim claimObj, String username) throws ClaimAmountGreaterThanCoverageAmountException, WalletNotFoundException, PolicyAlreadyClaimedException, SubmittingClaimOnTheSameDayException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String formattedPurchaseDttm = claimObj.getPurchaseDttm().format(formatter);
 		long policyId = policyService.getPolicyIdByName(claimObj.getPolicyName());
@@ -70,7 +70,7 @@ public class UserPolicyClaimService {
 		
 		if(this.isClaimingOnSameDay(obj)) {
 			log.info("Claiming on the smae day");
-			throw new WalletNotFoundException("You can't claim on the same day as the date of purchase");
+			throw new SubmittingClaimOnTheSameDayException("You can't claim on the same day as the date of purchase");
 		}
 		
 		if (!policyService.isUnderMaxCoverage(claimObj.getPolicyName(), claimObj.getClaimAmount()))
@@ -107,11 +107,14 @@ public class UserPolicyClaimService {
 	}
 	
 	public Boolean isBuyingOnSameDay(long userId) {
-		UserPolicyClaim latestInsurance = userPolicyClaimRepo.findByUserId(userId);
+		UserPolicyClaim latestInsurance = userPolicyClaimRepo.findLatestByUserId(userId);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime currentDate = LocalDateTime.now();
 		String current = currentDate.format(formatter);
 		String purchaseDate = latestInsurance.getPurchaseDttm().substring(0, 10);
+		log.info("Required Data is below this");
+		log.info(purchaseDate);
+		log.info(current);
 		if(purchaseDate.equals(current)) {
 			log.info("Submitting on the same day");
 			return true;
